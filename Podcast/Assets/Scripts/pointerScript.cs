@@ -6,11 +6,12 @@ using UnityEngine;
 
 public class pointerScript : MonoBehaviour
 {
-    public GameObject beat;
+    
+
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("hello");
+        Debug.Log("pointer start");
     }
 
     // Update is called once per frame
@@ -18,12 +19,23 @@ public class pointerScript : MonoBehaviour
     {
         // gets the coordinates of the mouse relative to the window's coordinates
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosition.z = 0;
+        mousePosition.z = -3;
         transform.position = mousePosition;
 
-        if(Input.GetKeyDown(KeyCode.A)){
-            Debug.Log(Input.mousePosition);
-            beat.SetActive(false);
+        if (Input.GetKeyDown(KeyCode.Space) && Input.GetKeyDown(KeyCode.Space))
+        {
+
+            Collider2D[] hitColliders = Physics2D.OverlapPointAll(mousePosition);
+
+            foreach (Collider2D hit in hitColliders)
+            {
+                if (hit.CompareTag("beat"))
+                {
+                    hit.gameObject.SetActive(false);
+                    Debug.Log(Input.mousePosition);
+                }
+            }
         }
     }
+
 }
