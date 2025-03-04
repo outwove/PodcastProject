@@ -7,10 +7,11 @@ using UnityEngine;
 public class pointerScript : MonoBehaviour
 {
     public GameObject beat;
+    private GameObject currentCollidedBeat;
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("hello");
+
     }
 
     // Update is called once per frame
@@ -29,6 +30,23 @@ public class pointerScript : MonoBehaviour
         // gets the position of the mouse when clicked
         if(Input.GetMouseButtonDown(0)){
             Debug.Log(Input.mousePosition);
+        }
+
+        // checks if the user recently collided with a beat
+        if (currentCollidedBeat != null && Input.GetKeyDown(KeyCode.A))
+        {
+            Debug.Log("Make beat invis");
+            currentCollidedBeat.gameObject.SetActive(false);
+            currentCollidedBeat = null;
+        }
+    }
+
+    // stores a reference to the beat the user is hovering over
+    void OnTriggerEnter2D(Collider2D collidedBeat)
+    {
+        if(collidedBeat.CompareTag("beat")){
+            Debug.Log("collided " + collidedBeat.tag);
+            currentCollidedBeat = collidedBeat.gameObject;
         }
     }
 }
