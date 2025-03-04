@@ -6,11 +6,13 @@ using UnityEngine;
 
 public class pointerScript : MonoBehaviour
 {
-    
+    public AudioSource clickSound;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        
         Debug.Log("pointer start");
     }
 
@@ -22,7 +24,7 @@ public class pointerScript : MonoBehaviour
         mousePosition.z = -3;
         transform.position = mousePosition;
 
-        if (Input.GetKeyDown(KeyCode.Space) && Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.A))
         {
 
             Collider2D[] hitColliders = Physics2D.OverlapPointAll(mousePosition);
@@ -33,9 +35,18 @@ public class pointerScript : MonoBehaviour
                 {
                     hit.gameObject.SetActive(false);
                     Debug.Log(Input.mousePosition);
+
+                    // Play sound effect
+                    if (clickSound != null)
+                    {
+                        clickSound.PlayOneShot(clickSound.clip);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("No AudioSource assigned to PointerScript!");
+                    }
                 }
             }
         }
     }
-
 }
