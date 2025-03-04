@@ -43,6 +43,7 @@ public class pointerScript : MonoBehaviour
             currentCollidedBeat = null;
 
             // updates the active beat
+            Debug.Log(beatManagerScript.beatsIndex);
             beatManagerScript.beatsIndex += 1;
         }
     }
@@ -50,7 +51,7 @@ public class pointerScript : MonoBehaviour
     // stores a reference to the beat the user is hovering over
     void OnTriggerEnter2D(Collider2D collidedBeat)
     {
-        Debug.Log("pointer collided");
+        //Debug.Log("pointer collided");
         if(collidedBeat.CompareTag("beat")){
             //Debug.Log("collided " + collidedBeat.tag);
             currentCollidedBeat = collidedBeat.gameObject;

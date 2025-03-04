@@ -30,7 +30,10 @@ public class beatManager : MonoBehaviour
             Vector3 worldPosition3D = Camera.main.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 0)); // Adjust Z if needed
             Vector2 worldPosition = new Vector2(worldPosition3D.x, worldPosition3D.y);
 
-            beats.Add(Instantiate(beat, worldPosition, Quaternion.identity));
+            GameObject newBeat = Instantiate(beat, worldPosition, Quaternion.identity);
+            newBeat.SetActive(false);
+
+            beats.Add(newBeat);
             Debug.Log("added beat" + beats[positionCol].transform.position.z);
             //Debug.Log(beats[positionCol].activeSelf);
         }
@@ -40,17 +43,30 @@ public class beatManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for(int visibleBeat = beatsIndex+2; visibleBeat < beats.Count; visibleBeat++){
-            beats[visibleBeat].SetActive(false);
-        }
+        setActiveBeatColor();
 
-        // sets the beat after the current one to half opacity
-        if(beatsIndex < beats.Count){
-            SpriteRenderer beatSprite = beats[beatsIndex+1].GetComponentInChildren<SpriteRenderer>();
-            Color beatColor = beatSprite.color;
-            beatColor.a = 0.5f;
-            beatSprite.color = beatColor;
+        if(beatsIndex < beats.Count-1){
+            setNextActiveBeat();
         }
     }
 
+    // sets the beat the user is supposed to click on at full opacity
+    void setActiveBeatColor(){
+        beats[beatsIndex].SetActive(true);
+        SpriteRenderer beatSprite = beats[beatsIndex].GetComponentInChildren<SpriteRenderer>();
+        Color beatColor = beatSprite.color;
+        beatColor.a = 1f;
+        beatSprite.color = beatColor;
+    }
+
+    // sets the next beat to half opacity
+    void setNextActiveBeat(){
+        beats[beatsIndex + 1].SetActive(true);
+        // sets the beat after the current one to half opacity
+
+        SpriteRenderer beatSprite = beats[beatsIndex+1].GetComponentInChildren<SpriteRenderer>();
+        Color beatColor = beatSprite.color;
+        beatColor.a = 0.5f;
+        beatSprite.color = beatColor;
+    }
 }
