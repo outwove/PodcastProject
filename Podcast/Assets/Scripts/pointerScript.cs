@@ -25,5 +25,10 @@ public class pointerScript : MonoBehaviour
             Debug.Log(Input.mousePosition);
             beat.SetActive(false);
         }
+
+        // gets the position of the mouse when clicked
+        if(Input.GetMouseButtonDown(0)){
+            Debug.Log(Input.mousePosition);
+        }
     }
 }
