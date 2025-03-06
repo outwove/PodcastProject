@@ -17,10 +17,13 @@ public class beatManager : MonoBehaviour
         new Vector2(125, 149), new Vector2(194, 300), new Vector2(377, 305), new Vector2(394, 94)
     };
 
-    //tracks the active beat
+    //tracks the beat location index in the beatPositions array
     public int beatsIndex = 0;
+    // tracks which beat is active
+    public int activeBeatIndex = 0;
+
     //time between each beat spawn (TEMPORARY)
-    public float spawnInterval = 1; 
+    public float spawnInterval = 1;
 
     void Start()
     {
@@ -111,6 +114,8 @@ public class beatManager : MonoBehaviour
         float duration = 0.5f;
         float elapsedTime = 0f;
 
+        float finalSpawnOpacity;
+
         while (elapsedTime < duration)
         {
 
@@ -123,7 +128,7 @@ public class beatManager : MonoBehaviour
             yield return null;
         }
 
-        //ensure full opacity
+        //ensure full opacity if its the active beat
         Color finalColor = sprite.color;
         finalColor.a = 1f;
         sprite.color = finalColor;

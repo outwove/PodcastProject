@@ -354,6 +354,7 @@ MonoBehaviour:
   - {x: 650, y: 550}
   - {x: 50, y: 800}
   beatsIndex: 0
+  activeBeatIndex: 0
   spawnInterval: 0.455
 --- !u!4 &1153663763
 Transform:
@@ -777,6 +778,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clickSound: {fileID: 1925749083}
+  beatManagerScript: {fileID: 1153663762}
 --- !u!4 &1978129208
 Transform:
   m_ObjectHideFlags: 0

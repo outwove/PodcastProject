@@ -7,7 +7,7 @@ using UnityEngine;
 public class pointerScript : MonoBehaviour
 {
     public AudioSource clickSound;
-
+    public beatManager beatManagerScript;
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +40,9 @@ public class pointerScript : MonoBehaviour
                     if (clickSound != null)
                     {
                         clickSound.PlayOneShot(clickSound.clip);
+
+                        // updates the active beat index to the next beat
+                        beatManagerScript.activeBeatIndex++;
                     }
                     else
                     {
