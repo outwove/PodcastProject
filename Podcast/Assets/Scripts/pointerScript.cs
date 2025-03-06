@@ -6,15 +6,14 @@ using UnityEngine;
 
 public class pointerScript : MonoBehaviour
 {
-    public GameObject beat;
-    public beatManager beatManagerScript;
+    public AudioSource clickSound;
 
 
-    private GameObject currentCollidedBeat;
     // Start is called before the first frame update
     void Start()
     {
 
+        Debug.Log("pointer start");
     }
 
     // Update is called once per frame
@@ -22,39 +21,32 @@ public class pointerScript : MonoBehaviour
     {
         // gets the coordinates of the mouse relative to the window's coordinates
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosition.z = 0;
+        mousePosition.z = -3;
         transform.position = mousePosition;
 
-        if(Input.GetKeyDown(KeyCode.A)){
-            Debug.Log(Input.mousePosition);
-            beat.SetActive(false);
-        }
-
-        // gets the position of the mouse when clicked
-        /*if(Input.GetMouseButtonDown(0)){
-            Debug.Log(Input.mousePosition);
-        }*/
-
-        // checks if the user recently collided with a beat
-        if (currentCollidedBeat != null && Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.A))
         {
-            Debug.Log("Make beat invis");
-            currentCollidedBeat.gameObject.SetActive(false);
-            currentCollidedBeat = null;
 
-            // updates the active beat
-            Debug.Log(beatManagerScript.beatsIndex);
-            beatManagerScript.beatsIndex += 1;
-        }
-    }
+            Collider2D[] hitColliders = Physics2D.OverlapPointAll(mousePosition);
 
-    // stores a reference to the beat the user is hovering over
-    void OnTriggerEnter2D(Collider2D collidedBeat)
-    {
-        //Debug.Log("pointer collided");
-        if(collidedBeat.CompareTag("beat")){
-            //Debug.Log("collided " + collidedBeat.tag);
-            currentCollidedBeat = collidedBeat.gameObject;
+            foreach (Collider2D hit in hitColliders)
+            {
+                if (hit.CompareTag("beat"))
+                {
+                    hit.gameObject.SetActive(false);
+                    Debug.Log(Input.mousePosition);
+
+                    // Play sound effect
+                    if (clickSound != null)
+                    {
+                        clickSound.PlayOneShot(clickSound.clip);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("No AudioSource assigned to PointerScript!");
+                    }
+                }
+            }
         }
     }
 }
