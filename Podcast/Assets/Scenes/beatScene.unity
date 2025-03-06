@@ -322,14 +322,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f49577b680487204d864440c43ba669a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beatPrefab: {fileID: 0}
+  beatPrefab: {fileID: 895475476388998242, guid: a957e05001438a541acdfaa1fa13b651, type: 3}
+  musicSource: {fileID: 1245469334}
   beatPositions:
   - {x: 125, y: 149}
   - {x: 194, y: 300}
   - {x: 377, y: 305}
   - {x: 394, y: 94}
+  - {x: 500, y: 600}
+  - {x: 600, y: 550}
+  - {x: 770, y: 610}
+  - {x: 870, y: 400}
+  - {x: 900, y: 587}
+  - {x: 1000, y: 800}
+  - {x: 950, y: 300}
+  - {x: 1100, y: 800}
+  - {x: 1500, y: 800}
+  - {x: 1100, y: 800}
+  - {x: 1004, y: 500}
+  - {x: 845, y: 760}
+  - {x: 573, y: 1156}
+  - {x: 1004, y: 360}
+  - {x: 1500, y: 700}
+  - {x: 1300, y: 360}
+  - {x: 1600, y: 234}
+  - {x: 1004, y: 896}
+  - {x: 150, y: 500}
+  - {x: 345, y: 700}
+  - {x: 150, y: 500}
+  - {x: 450, y: 750}
+  - {x: 650, y: 550}
+  - {x: 50, y: 800}
   beatsIndex: 0
-  spawnInterval: 1.5
+  spawnInterval: 0.455
 --- !u!4 &1153663763
 Transform:
   m_ObjectHideFlags: 0
@@ -495,7 +520,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 895475476388998242, guid: a957e05001438a541acdfaa1fa13b651, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 895475476388998242, guid: a957e05001438a541acdfaa1fa13b651, type: 3}
       propertyPath: m_TagString
