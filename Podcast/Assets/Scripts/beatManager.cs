@@ -5,68 +5,95 @@ using UnityEngine;
 
 public class beatManager : MonoBehaviour
 {
-    public GameObject beat;
+    public GameObject beatPrefab;
 
-    // array of gameobjects
-    List<GameObject> beats = new List<GameObject>();
+    private List<GameObject> beats = new List<GameObject>();
 
-    // array that stores the positions the beats will be at
-    public Vector2[,] beatPositions = new Vector2[,] {
-        {new Vector2(125, 149), new Vector2(194, 300), new Vector2(377, 305), new Vector2(394, 94)}
+    // Array of predefined positions
+    public Vector2[] beatPositions = {
+        new Vector2(125, 149), new Vector2(194, 300), new Vector2(377, 305), new Vector2(394, 94)
     };
 
-    public int beatsIndex = 0; // keeps track of which beat is active in the list
+    public int beatsIndex = 0; // Tracks the active beat
+    public float spawnInterval = 1.5f; // Time between each beat spawn
 
-    // keeps track of which position set the beats will be spawning at
-    private int positionIndex = 0;
-
-    private GameObject currentCollidedBeat;
-    // Start is called before the first frame update
     void Start()
     {
-        // sets each beat to the position at the corresponding column index in beatPositions
-        for(int positionCol = 0; positionCol < 4; positionCol++){
-            Vector2 screenPosition = beatPositions[0, positionCol];
-            Vector3 worldPosition3D = Camera.main.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 0)); // Adjust Z if needed
-            Vector2 worldPosition = new Vector2(worldPosition3D.x, worldPosition3D.y);
+        StartCoroutine(SpawnBeatsDynamically());
+    }
 
-            GameObject newBeat = Instantiate(beat, worldPosition, Quaternion.identity);
-            newBeat.SetActive(false);
+    IEnumerator SpawnBeatsDynamically()
+    {
+        while (beatsIndex < beatPositions.Length)
+        {
+            Vector2 screenPos = beatPositions[beatsIndex];
+            Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, Camera.main.nearClipPlane + 5f));
+
+            GameObject newBeat = Instantiate(beatPrefab, worldPos, Quaternion.identity);
+            newBeat.SetActive(true); // Ensure it's visible
+
+            // Start with half opacity
+            SpriteRenderer sprite = newBeat.GetComponentInChildren<SpriteRenderer>();
+            Color color = sprite.color;
+            color.a = 0.5f;
+            sprite.color = color;
 
             beats.Add(newBeat);
-            Debug.Log("added beat" + beats[positionCol].transform.position.z);
-            //Debug.Log(beats[positionCol].activeSelf);
+
+            // Start fade-in effect
+            StartCoroutine(FadeInBeat(sprite));
+
+            beatsIndex++;
+
+            // Wait before spawning the next beat
+            yield return new WaitForSeconds(spawnInterval);
+            }
         }
 
-    }
-
-    // Update is called once per frame
-    void Update()
+    void SpawnBeats()
     {
-        setActiveBeatColor();
+        for (int i = 0; i < beatPositions.Length; i++)
+        {
+            Vector2 screenPos = beatPositions[i];
+            Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, Camera.main.nearClipPlane + 5f));
 
-        if(beatsIndex < beats.Count-1){
-            setNextActiveBeat();
+            GameObject newBeat = Instantiate(beatPrefab, worldPos, Quaternion.identity);
+            newBeat.SetActive(true); // Ensure it's visible
+
+            // Start with half opacity
+            SpriteRenderer sprite = newBeat.GetComponentInChildren<SpriteRenderer>();
+            Color color = sprite.color;
+            color.a = 0.5f;
+            sprite.color = color;
+
+            beats.Add(newBeat);
+
+            // Start fade-in effect
+            StartCoroutine(FadeInBeat(sprite));
         }
     }
 
-    // sets the beat the user is supposed to click on at full opacity
-    void setActiveBeatColor(){
-        beats[beatsIndex].SetActive(true);
-        SpriteRenderer beatSprite = beats[beatsIndex].GetComponentInChildren<SpriteRenderer>();
-        Color beatColor = beatSprite.color;
-        beatColor.a = 1f;
-        beatSprite.color = beatColor;
-    }
 
-    // sets the next beat to half opacity
-    void setNextActiveBeat(){
-        beats[beatsIndex + 1].SetActive(true);
-        // sets the beat after the current one to half opacity
 
-        SpriteRenderer beatSprite = beats[beatsIndex+1].GetComponentInChildren<SpriteRenderer>();
-        Color beatColor = beatSprite.color;
-        beatColor.a = 0.5f;
-        beatSprite.color = beatColor;
+    IEnumerator FadeInBeat(SpriteRenderer sprite)
+    {
+        float duration = 1.0f; // Fade-in duration
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            float alpha = Mathf.Lerp(0.5f, 1f, elapsedTime / duration);
+            Color color = sprite.color;
+            color.a = alpha;
+            sprite.color = color;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure full opacity
+        Color finalColor = sprite.color;
+        finalColor.a = 1f;
+        sprite.color = finalColor;
     }
 }
