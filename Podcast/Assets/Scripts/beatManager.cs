@@ -30,7 +30,11 @@ public class beatManager : MonoBehaviour
         StartCoroutine(SpawnBeatsDynamically());
     }
 
-
+    void Update()
+    {
+        beats[activeBeatIndex].SetActive(true);
+        beats[activeBeatIndex+1].SetActive(true);
+    }
     //temporary for spawning beats before we have a list of beat times from scotts project to work w
     //flaw: it spawns beats at a set interval when we need to customize the timing
 
@@ -42,22 +46,27 @@ public class beatManager : MonoBehaviour
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, Camera.main.nearClipPlane + 5f));
 
             GameObject newBeat = Instantiate(beatPrefab, worldPos, Quaternion.identity);
-            newBeat.SetActive(true);
+
+            // makes the beats initially invisible
+            newBeat.SetActive(false);
 
             // Start with half opacity
             SpriteRenderer sprite = newBeat.GetComponentInChildren<SpriteRenderer>();
-            Color color = sprite.color;
-            color.a = 0.1f;
-            sprite.color = color;
 
             beats.Add(newBeat);
 
             // Start fade-in effect
             StartCoroutine(FadeInBeat(sprite));
 
+            // makes the beat at activeBeatIndex have full opacity
+            SpriteRenderer activeBeatSprite = beats[activeBeatIndex].GetComponentInChildren<SpriteRenderer>();
+            Color activeColor = activeBeatSprite.color;
+            activeColor.a = 1f;
+            activeBeatSprite.color = activeColor;
+
             beatsIndex++;
 
-            // Wait before spawning the next beat
+            // Wait before creating the next beat
             yield return new WaitForSeconds(spawnInterval);
             }
         }
@@ -114,12 +123,9 @@ public class beatManager : MonoBehaviour
         float duration = 0.5f;
         float elapsedTime = 0f;
 
-        float finalSpawnOpacity;
-
         while (elapsedTime < duration)
         {
-
-            float alpha = Mathf.Lerp(0.5f, 1f, elapsedTime / duration);
+            float alpha = Mathf.Lerp(0.0f, 0.3f, elapsedTime / duration);
             Color color = sprite.color;
             color.a = alpha;
             sprite.color = color;
@@ -127,10 +133,5 @@ public class beatManager : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
-        //ensure full opacity if its the active beat
-        Color finalColor = sprite.color;
-        finalColor.a = 1f;
-        sprite.color = finalColor;
     }
 }

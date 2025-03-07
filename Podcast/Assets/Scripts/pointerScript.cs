@@ -35,14 +35,13 @@ public class pointerScript : MonoBehaviour
                 {
                     hit.gameObject.SetActive(false);
                     Debug.Log(Input.mousePosition);
+                    // updates the active beat index to the next beat
+                    beatManagerScript.activeBeatIndex++;
 
                     // Play sound effect
                     if (clickSound != null)
                     {
                         clickSound.PlayOneShot(clickSound.clip);
-
-                        // updates the active beat index to the next beat
-                        beatManagerScript.activeBeatIndex++;
                     }
                     else
                     {
